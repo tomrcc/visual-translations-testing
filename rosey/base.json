@@ -1,14 +1,6 @@
 {
   "version": 2,
   "keys": {
-    "index_title": {
-      "original": "Beautiful web campaigns",
-      "value": null,
-      "pages": {
-        "index.html": 1
-      },
-      "total": 1
-    },
     "about_title": {
       "original": "On a mission to change email marketing",
       "value": null,
@@ -22,6 +14,14 @@
       "value": null,
       "pages": {
         "features/index.html": 1
+      },
+      "total": 1
+    },
+    "index_title": {
+      "original": "Beautiful web campaigns",
+      "value": null,
+      "pages": {
+        "index.html": 1
       },
       "total": 1
     }

@@ -1,8 +1,8 @@
 ---
-const { selectedLocale, dataProp, pageSlug, text } = Astro.props;
+const { selectedLocale, dataProp, text } = Astro.props;
 
+const pageSlug = Astro.url.pathname.replace(/^\/|\/$/g, '') || 'index';
 const dataFileKey = "locales";
-console.log({ pageSlug });
 const roseyId = `${pageSlug}_${dataProp.replaceAll(".", "_")}`;
 ---
 

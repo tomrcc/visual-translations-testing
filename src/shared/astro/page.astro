@@ -21,9 +21,7 @@ Object.entries(componentImports).forEach(([path, mod]: [string, any]) => {
   components[rel] = mod.default;
 });
 
-const pageSlug = Astro.params.slug || "index";
-
-const { content_blocks } = Astro.props;
+const { content_blocks, selectedLocale } = Astro.props;
 ---
 
 <main
@@ -44,10 +42,9 @@ const { content_blocks } = Astro.props;
       return (
         <editable-array-item
           data-id={block._name}
-          data-component={block._name}
-          data-literal-slug={pageSlug}>
+          data-component={block._name}>
           <editable-component data-component={block._name} data-prop="">
-            <Component {...block} pageSlug={pageSlug} />
+            <Component {...block} selectedLocale={selectedLocale} />
           </editable-component>
         </editable-array-item>
       );
