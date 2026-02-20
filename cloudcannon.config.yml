@@ -235,6 +235,9 @@ collection_groups:
     collections:
       - data
 _inputs:
+  page_slug:
+    hidden: true
+    cascade: true
   title:
     type: text
     options:
@@ -448,6 +451,8 @@ data_config:
     path: data/navigation.json
   theme:
     path: data/theme.json
+  locales:
+    path: rosey/locales/fr.json # This could be changed to one big data file that sits before the locales that contains all locales info
 timezone: Etc/UTC
 _structures_from_glob:
   - /.cloudcannon/*.cloudcannon.structures.yml

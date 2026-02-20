@@ -12,6 +12,7 @@ seo:
 content_blocks:
   - _name: global/hero
     title: Run the best campaigns
+    selected_locale: en
     description: Sendit will change the way you think about email and marketing automation.
     button:
       link: /signup

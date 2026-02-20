@@ -12,6 +12,7 @@ seo:
 content_blocks:
   - _name: global/hero
     title: On a mission to change email marketing
+    selected_locale: en
     description: >-
       We're here to breathe new air into email marketing and help grow your
       business.

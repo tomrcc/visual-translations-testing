@@ -4,7 +4,7 @@ const componentImports = import.meta.glob(
   "../../components/**/*.{jsx,tsx,astro}",
   {
     eager: true,
-  }
+  },
 );
 
 Object.entries(componentImports).forEach(([path, mod]: [string, any]) => {
@@ -21,6 +21,8 @@ Object.entries(componentImports).forEach(([path, mod]: [string, any]) => {
   components[rel] = mod.default;
 });
 
+const pageSlug = Astro.params.slug || "index";
+
 const { content_blocks } = Astro.props;
 ---
 
@@ -30,8 +32,7 @@ const { content_blocks } = Astro.props;
   data-editable="array"
   data-prop="content_blocks"
   data-id-key="_name"
-  data-component-key="_name"
->
+  data-component-key="_name">
   {
     content_blocks.map((block: any) => {
       const key = block._name;
@@ -41,9 +42,12 @@ const { content_blocks } = Astro.props;
         return null;
       }
       return (
-        <editable-array-item data-id={block._name} data-component={block._name}>
+        <editable-array-item
+          data-id={block._name}
+          data-component={block._name}
+          data-literal-slug={pageSlug}>
           <editable-component data-component={block._name} data-prop="">
-            <Component {...block} />
+            <Component {...block} pageSlug={pageSlug} />
           </editable-component>
         </editable-array-item>
       );

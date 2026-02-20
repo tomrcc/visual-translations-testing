@@ -1,0 +1,25 @@
+---
+const { selectedLocale, dataProp, pageSlug, text } = Astro.props;
+
+const dataFileKey = "locales";
+console.log({ pageSlug });
+const roseyId = `${pageSlug}_${dataProp.replaceAll(".", "_")}`;
+---
+
+{
+  selectedLocale === "fr" ? (
+    <editable-text
+      data-editable="text"
+      data-prop={`@data[${dataFileKey}].${roseyId}.value`}
+      data-rosey={roseyId}>
+      {text}
+    </editable-text>
+  ) : (
+    <editable-text
+      data-editable="text"
+      data-prop={dataProp}
+      data-rosey={roseyId}>
+      {text}
+    </editable-text>
+  )
+}

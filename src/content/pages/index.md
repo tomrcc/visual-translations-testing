@@ -11,7 +11,9 @@ seo:
   no_index: false
 content_blocks:
   - _name: global/hero
+    page_slug: index
     title: Beautiful web campaigns
+    selected_locale: fr
     description: >-
       With Sendit, you can quickly create beautiful rich emails that capture a
       reader's attention, engage them, and convert them into customers.
