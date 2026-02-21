@@ -9,7 +9,9 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "write-locales": "node writeLocales.mjs "
+    "rosey-connector": "npm run build && npm run rosey-generate && npm run write-locales",
+    "rosey-generate": "npx rosey generate --source dist",
+    "write-locales": "node writeLocales.mjs"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.5",

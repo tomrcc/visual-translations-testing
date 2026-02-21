@@ -10,7 +10,7 @@ interface Props {
   [key: string]: any;
 }
 
-const { level = 1, size, text, selectedLocale, class: className = "", ...rest } = Astro.props;
+const { level = 1, size, text, selectedLocale, pageslug, class: className = "", ...rest } = Astro.props;
 
 // Runtime check to ensure proper usage
 const hasSlotContent = Astro.slots.has("default");
@@ -49,7 +49,7 @@ const Tag = `h${level}` as any;
   {
     text ? (
       dataEditable && dataProp ? (
-        <TranslatedText selectedLocale={selectedLocale} dataProp={dataProp} text={text} />
+        <TranslatedText selectedLocale={selectedLocale} pageslug={pageslug} dataProp={dataProp} text={text} />
       ) : (
         text
       )

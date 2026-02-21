@@ -1,1 +1,10 @@
-{"about_title":{"original":"On a mission to change email marketing","value":"On a mission to change email marketing"},"features_title":{"original":"Run the best campaigns","value":"Run the best campaigns"},"index_title":{"original":"Beautiful web campaigns","value":"Beautiful web campaigns"}}
+{
+  "about_title": {
+    "original": "On a mission to change email marketing",
+    "value": "On a french to change email marketing"
+  },
+  "index_title": {
+    "original": "Beautiful web campaigns",
+    "value": "Beautiful french campaigns"
+  }
+}

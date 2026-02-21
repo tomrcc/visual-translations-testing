@@ -1,7 +1,6 @@
 ---
 _schema: default
 title: Home
-selected_locale: fr
 seo:
   page_description:
   canonical_url:
@@ -12,6 +11,8 @@ seo:
   no_index: false
 content_blocks:
   - _name: global/hero
+    selected_locale: en
+    page_slug: index
     title: Beautiful web campaigns
     description: >-
       With Sendit, you can quickly create beautiful rich emails that capture a

@@ -1,16 +1,39 @@
 ---
-const { selectedLocale, dataProp, text } = Astro.props;
+const { selectedLocale, dataProp, text, pageslug } = Astro.props;
 
-const pageSlug = Astro.url.pathname.replace(/^\/|\/$/g, '') || 'index';
-const dataFileKey = "locales";
+const pageSlug = pageslug || "index";
 const roseyId = `${pageSlug}_${dataProp.replaceAll(".", "_")}`;
 ---
 
+<!-- 
 {
   selectedLocale === "fr" ? (
     <editable-text
       data-editable="text"
-      data-prop={`@data[${dataFileKey}].${roseyId}.value`}
+      data-prop={`@data[locales_fr].${roseyId}.value`}
+      data-rosey={roseyId}>
+      {text}
+    </editable-text>
+  ) : selectedLocale === "de" ? (
+    <editable-text
+      data-editable="text"
+      data-prop={`@data[locales_de].${roseyId}.value`}
+      data-rosey={roseyId}>
+      {text}
+    </editable-text>
+  ) : (
+    <editable-text
+      data-editable="text"
+      data-prop={dataProp}
+      data-rosey={roseyId}>
+      {text}
+    </editable-text>
+  )
+} -->{
+  selectedLocale !== "en" ? (
+    <editable-text
+      data-editable="text"
+      data-prop={`@data[locales_${selectedLocale}].${roseyId}.value`}
       data-rosey={roseyId}>
       {text}
     </editable-text>

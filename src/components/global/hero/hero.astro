@@ -19,18 +19,17 @@ interface HeroImage {
 
 interface Props {
   title: string;
-  selectedLocale?: string;
+  selected_locale?: string;
+  page_slug?: string;
   description: string;
   button?: ButtonType;
-  // Single image props (for backward compatibility)
   image?: string;
   image_alt?: string;
-  // Multiple images props (for about page and similar)
   hero_images?: HeroImage[];
 }
 
 
-const { title, selectedLocale, description, button, image, image_alt, hero_images } = Astro.props;
+const { title, selected_locale, page_slug, description, button, image, image_alt, hero_images } = Astro.props;
 
 // Helper function to get placement class
 const getPlacementClass = (placement: string) => {
@@ -67,7 +66,7 @@ const hasSingleImage = image && image_alt;
 
   <div class="mx-auto max-w-[1500px] px-6 pt-10 pb-24 sm:pb-32 lg:flex lg:px-8 lg:py-40">
     <div class="mx-auto max-w-2xl shrink-0 lg:mx-0 lg:pt-8">
-      <TestHeading level={1} text={title} data-prop="title" selectedLocale={selectedLocale} data-editable="text" class="mb-6" />
+      <TestHeading level={1} text={title} data-prop="title" selectedLocale={selected_locale} pageslug={page_slug} data-editable="text" class="mb-6" />
       <!-- <h1 data-editable="text" data-prop="@data[locales].test.value">This is some text</h1> -->
       <Text text={description} data-prop="description" data-editable="text" size="xl" markdown={true} class="text-pretty" />
       <div class="mt-10 flex items-center gap-x-6">

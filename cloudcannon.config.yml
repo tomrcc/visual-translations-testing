@@ -243,6 +243,8 @@ _inputs:
       allow_empty: true
       values:
         - fr
+        - en
+        - de
     cascade: true
   page_slug:
     hidden: true
@@ -460,8 +462,10 @@ data_config:
     path: data/navigation.json
   theme:
     path: data/theme.json
-  locales:
+  locales_fr:
     path: rosey/locales/fr.json # This could be changed to one big data file that sits before the locales that contains all locales info
+  locales_de:
+    path: rosey/locales/de.json # This could be changed to one big data file that sits before the locales that contains all locales info
 timezone: Etc/UTC
 _structures_from_glob:
   - /.cloudcannon/*.cloudcannon.structures.yml

@@ -1,7 +1,7 @@
 import fs from "node:fs"
 import path from "node:path"
 
-const locales = ["fr"];
+const locales = ["fr", "de"];
 const roseyDir = "rosey";
 
 (async () => {
@@ -11,13 +11,9 @@ const roseyDir = "rosey";
   console.log(baseJson)
   locales.map(async (locale) => {
     const writeFilePath = path.join(roseyDir, "locales", `${locale}.json`);
-    const writeFileData = {};
-    try {
-      const existingLocaleDataRaw = await fs.promises.readFile(writeFilePath);
-      writeFileData = JSON.parse(existingLocaleDataRaw);
-    } catch (error) {
-      // Do nothing
-    }
+    let writeFileData = {};
+    const existingLocaleDataRaw = await fs.promises.readFile(writeFilePath);
+    writeFileData = JSON.parse(existingLocaleDataRaw);
 
     for (const [key, value] of Object.entries(baseJson)) {
       console.log(`${key}: ${value.original}`);
