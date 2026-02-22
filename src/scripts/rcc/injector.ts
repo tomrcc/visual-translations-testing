@@ -6,8 +6,10 @@
  * and @data[locales_{locale}].{roseyKey}.value paths.
  *
  * setAttribute alone does NOT trigger CC re-binding — only removing
- * the element and inserting a fresh clone works (confirmed in Phase 1).
+ * the element and inserting a fresh clone works.
  */
+
+import { log, warn } from "./logger";
 
 interface ElementSnapshot {
   outerHTML: string;
@@ -51,7 +53,7 @@ function snapshotElements(): void {
       index,
     });
   });
-  console.log(`[locale-injector] Snapshotted ${snapshots.size} elements:`, [...snapshots.keys()]);
+  log(`Snapshotted ${snapshots.size} translatable elements`);
 }
 
 function cloneFromHTML(html: string): Element {
@@ -66,7 +68,7 @@ function switchLocale(locale: string | null): void {
   snapshots.forEach((snap, roseyKey) => {
     const currentEl = document.querySelector(`[data-rcc][data-rosey="${roseyKey}"]`);
     if (!currentEl) {
-      console.warn(`[locale-injector] Could not find element for key "${roseyKey}"`);
+      warn(`Could not find element for key "${roseyKey}"`);
       return;
     }
 
@@ -79,7 +81,7 @@ function switchLocale(locale: string | null): void {
     currentEl.parentNode?.replaceChild(clone, currentEl);
   });
 
-  console.log(`[locale-injector] Switched to: ${locale ?? "Original"}`);
+  log(`Switched to ${locale ?? "Original"}`);
   updateButtonStates();
 }
 
@@ -147,10 +149,7 @@ function injectSwitcher(locales: string[]): void {
 
 function init(): void {
   const main = document.querySelector("main[data-locales]");
-  if (!main) {
-    console.warn("[locale-injector] No <main data-locales> found. Skipping.");
-    return;
-  }
+  if (!main) return;
 
   const localesAttr = main.getAttribute("data-locales");
   if (!localesAttr) return;
@@ -160,12 +159,12 @@ function init(): void {
   snapshotElements();
 
   if (snapshots.size === 0) {
-    console.warn("[locale-injector] No [data-rcc] elements found. Skipping.");
+    warn("No translatable elements found (missing data-rcc attributes)");
     return;
   }
 
   injectSwitcher(locales);
-  console.log("[locale-injector] Ready. Locales:", locales);
+  log(`Ready — ${locales.length} locales, ${snapshots.size} elements`);
 }
 
 if ((window as any).inEditorMode) {

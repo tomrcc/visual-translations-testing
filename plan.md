@@ -1,121 +1,91 @@
-# Project Plan: Visual Editor Translations PoC
+# RCC — Rosey CloudCannon Connector
 
-This is a living plan designed to prep AI agents, read it at the start of all prompts, and update it as needed to help future agents.
+A client-side script that enables visual editing of Rosey locale files in CloudCannon's Visual Editor. Developers add data attributes to their editable elements; the script handles locale switching via clone+replace in the editor.
 
-## What This Is
-
-A PoC exploring whether CloudCannon's Visual Editor editable regions can be wired directly to Rosey locale files, enabling in-place visual translation editing. The goal is a simple, robust translation workflow that bypasses convoluted middleware — editors see translated content in the Visual Editor, edit it directly, and saving writes back to the locale file.
+**Status:** PoC validated. Working end-to-end in CloudCannon Visual Editor. Ready to extract into a standalone npm package.
 
 ---
 
-## Architecture: Client-Side Locale Injection
+## How It Works
 
-Instead of Astro-side conditional rendering (the original approach), translations are handled entirely client-side via `src/scripts/locale-injector.ts`. Developers just add data attributes to their elements.
-
-### How It Works
-
-1. Developer adds `data-rosey="{key}"` and `data-rcc` to any editable element that should be translatable
-2. `data-locales="fr,de"` on `<main>` declares available locales
-3. A client-side script runs in the Visual Editor:
-   - Snapshots all `[data-rcc]` elements' outerHTML on init
-   - Injects a floating locale switcher UI
-   - On locale switch: clone+replace each element with a modified `data-prop` pointing to the locale data file
+1. Developer adds `data-rosey="{key}"` and `data-rcc` to any `editable-text` element
+2. `data-locales="fr,de"` on a parent element declares available locales
+3. The script runs in the Visual Editor and:
+   - Snapshots all `[data-rcc]` elements on init
+   - Injects a floating locale switcher
+   - On locale switch: clone+replace each element with `data-prop` rewriting to the locale data file
    - On "Original": clone+replace back from the snapshot
 
-**Key constraint (discovered in Phase 1 testing):** CloudCannon's editable regions do NOT respond to `setAttribute` changes on existing elements. Only clone+replace (remove old node, insert new node) triggers CC to re-bind. This applies in both directions — switching to a locale AND reverting to original both require clone+replace.
+**Key constraint:** CloudCannon does NOT re-bind when attributes are mutated on existing elements. Only clone+replace (remove old node, insert new node) triggers re-binding.
 
-### Developer Experience
+---
 
-```html
-<!-- Just add data-rosey and data-rcc to mark an element as translatable -->
-<Heading text={title} data-prop="title" data-editable="text"
-  data-rosey="index_title" data-rcc />
+## Package Source (`src/scripts/rcc/`)
+
+```
+src/scripts/rcc/
+  index.ts       — entry point
+  injector.ts    — core logic: snapshot, clone+replace, switcher UI
+  logger.ts      — verbose-gated logging (controlled by data-rcc-verbose)
 ```
 
-No special translation components, no locale prop threading, no conditional rendering.
+### Logging
+
+- `warn(...)` always outputs — real issues (missing elements, config problems)
+- `log(...)` only outputs when `data-rcc-verbose` is present on `<main>`
+- All messages prefixed with `RCC:`
+
+### Data attributes
+
+| Attribute | Where | Purpose |
+|---|---|---|
+| `data-rcc` | On `editable-text` elements | Marks the element as translatable |
+| `data-rosey="{key}"` | On `editable-text` elements | The Rosey translation key (also used by Rosey at build time) |
+| `data-locales="fr,de"` | On a parent element (e.g. `<main>`) | Declares available locales |
+| `data-rcc-verbose` | On a parent element (e.g. `<main>`) | Enables verbose logging |
+
+### Consumer integration (current PoC)
+
+In the layout file, lazy-load the script:
+
+```html
+<script>
+  import("../scripts/rcc/index.ts").catch(console.warn);
+</script>
+```
+
+When this becomes an npm package, consumers will import from the package instead.
 
 ---
 
-## Key Technical Concepts
-
-### Rosey
-
-- Runs **after** the Astro build, operating on static HTML output
-- Scans HTML for `data-rosey="{key}"` attributes and extracts originals into `rosey/base.json`
-- Reads `rosey/locales/{locale}.json` to produce translated copies of the site
-- Key format used in this project: `{pageSlug}_{fieldName}` (e.g. `index_title`, `about_description`)
-- Locale file structure: `{ "index_title": { "original": "Beautiful web campaigns", "value": "De belles campagnes web" } }`
-
-### CloudCannon Visual Editor / Editable Regions
-
-- `data-editable="text"` + `data-prop="fieldName"` makes an element in-place editable in the Visual Editor
-- `data-prop` can reference data files: `@data[locales_fr].index_title.value` points into `rosey/locales/fr.json`
-- When an editor saves, CloudCannon writes the new value back to the data file at the path specified by `data-prop`
-- CC does NOT re-bind when attributes are mutated on existing elements — only clone+replace triggers re-binding
-
-### The Connection
-
-The locale injector rewrites `data-prop` via clone+replace:
-- **Original mode:** `data-prop="title"` → reads/saves from the content block's `title` field
-- **Locale mode (e.g. fr):** `data-prop="@data[locales_fr].index_title.value"` → reads/saves from `rosey/locales/fr.json`
-
-The `data-rosey` attribute serves double duty:
-1. Rosey uses it at build time to extract original text into `base.json`
-2. The locale injector reads it at runtime to construct the locale data path
-
----
-
-## Current Implementation
+## PoC Implementation Details
 
 | File | Purpose |
 |---|---|
-| [`src/scripts/locale-injector.ts`](src/scripts/locale-injector.ts) | Client-side script: snapshots `[data-rcc]` elements, injects locale switcher, clone+replaces on switch |
-| [`src/layouts/Layout.astro`](src/layouts/Layout.astro) | Includes the locale-injector script (lazy-loaded) |
-| [`src/shared/astro/page.astro`](src/shared/astro/page.astro) | `<main>` carries `data-locales="fr,de"` for the injector to read |
-| [`src/components/shared/Heading.astro`](src/components/shared/Heading.astro) | Forwards `data-rosey` and `data-rcc` to inner `<editable-text>` |
-| [`src/components/shared/Text.astro`](src/components/shared/Text.astro) | Same — wraps text in `<editable-text>` with forwarded attributes |
-| [`src/components/shared/Button.astro`](src/components/shared/Button.astro) | Same forwarding pattern |
-| [`src/components/global/hero/hero.astro`](src/components/global/hero/hero.astro) | Uses `rosey_prefix` prop to generate `data-rosey` keys (e.g. `index_title`) |
-| [`rosey/locales/fr.json`](rosey/locales/fr.json) | French locale file (the data file CloudCannon edits) |
-| [`rosey/locales/de.json`](rosey/locales/de.json) | German locale file |
-| [`rosey/base.json`](rosey/base.json) | Rosey's extracted source-of-truth for translation keys |
-| [`writeLocales.mjs`](writeLocales.mjs) | Utility to scaffold locale files from `rosey/base.json` |
-| [`cloudcannon.config.yml`](cloudcannon.config.yml) | Maps `data_config.locales_fr` → `rosey/locales/fr.json`, `locales_de` → `de.json` |
-
-### How `rosey_prefix` works
-
-Components that contain translatable fields accept a `rosey_prefix` prop (e.g. `"index"` or `"about"`). This is used to construct `data-rosey` keys:
-- `rosey_prefix="index"` + field `title` → `data-rosey="index_title"`
-- If `rosey_prefix` is not set, no `data-rosey` or `data-rcc` attributes are added (the element is not translatable)
-
----
-
-## PoC Demo: Step-by-Step
-
-1. **[Dev]** Run `npm run build` to produce the `dist/` output.
-2. **[Dev]** Commit and push to the repo connected to CloudCannon.
-3. **[You — CloudCannon]** Open the **Index** page in the **Visual Editor**.
-4. **[You — CloudCannon]** See the floating locale switcher in the bottom-right corner.
-5. **[You — CloudCannon]** Click **FR** — the hero heading and description switch to show French translations from `fr.json`.
-6. **[You — CloudCannon]** Edit the French text in-place and save — CloudCannon writes back to `rosey/locales/fr.json`.
-7. **[You — CloudCannon]** Click **Original** to switch back to the default English content.
-8. **[Dev]** Pull the updated `fr.json`, run `npm run build` + Rosey to produce the translated multilingual site.
+| `src/scripts/rcc/` | Package-ready source (see above) |
+| `src/layouts/Layout.astro` | Includes the RCC script |
+| `src/shared/astro/page.astro` | `<main>` carries `data-locales` and `data-rcc-verbose` |
+| `src/components/shared/Heading.astro` | Forwards `data-rosey` and `data-rcc` to inner `<editable-text>` |
+| `src/components/shared/Text.astro` | Same forwarding pattern |
+| `src/components/shared/Button.astro` | Same forwarding pattern |
+| `src/components/global/hero/hero.astro` | Uses `rosey_prefix` to generate `data-rosey` keys |
+| `rosey/locales/*.json` | Locale data files that CC reads/writes |
+| `cloudcannon.config.yml` | Maps `data_config.locales_fr` / `locales_de` to locale file paths |
 
 ---
 
 ## Settled Decisions
 
-- **Rosey key format:** `{pageSlug}_{fieldName}` — page-prefixed to allow the same field name across different pages
-- **Clone+replace, not setAttribute** — CC only re-binds when DOM nodes are replaced, not when attributes are mutated
-- **Client-side locale switching** — no Astro-side conditional rendering; the JS handles everything in the Visual Editor
-- **`data-rcc` as the trigger attribute** — separate from `data-rosey` (which serves Rosey extraction)
-- **Do NOT follow RCC v1 patterns** — this PoC takes a simpler, more direct approach
-- **Stack:** Astro SSG + CloudCannon editable regions + client-side locale injector
+- **Clone+replace, not setAttribute** — CC only re-binds on node replacement
+- **Client-side locale switching** — no SSG-side conditionals needed
+- **`data-rcc` as trigger, `data-rosey` for the key** — separate concerns
+- **Rosey key format:** `{pageSlug}_{fieldName}`
+- **Verbose logging via data attribute** — `data-rcc-verbose` on a parent element
 
 ---
 
 ## Open Questions
 
-- Is `writeLocales.mjs` / `base.json` generation a manual dev step or should it be automated in the build pipeline?
-- Multi-locale support: `data-locales` currently hardcoded on `<main>`. Should it be driven from config/frontmatter?
-- Should `rosey_prefix` be automated (derived from the page slug) rather than manually set per block?
+- Should `data-locales` be driven from CloudCannon config rather than hardcoded?
+- Should `rosey_prefix` generation be automated from the page slug?
+- Package distribution: npm link for now, publish to npm later?

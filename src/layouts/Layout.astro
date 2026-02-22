@@ -80,8 +80,8 @@ const canonicalURL = new URL(seo?.canonical_url ?? Astro.url.pathname, baseUrl);
       }
     </script>
     <script>
-      import("../scripts/locale-injector.ts").catch((error) => {
-        console.warn("Failed to load locale injector:", error);
+      import("../scripts/rcc/index.ts").catch((error) => {
+        console.warn("Failed to load RCC locale injector:", error);
       });
     </script>
     <editable-component data-component="layouts/Navigation" data-prop="@data[navigation]">

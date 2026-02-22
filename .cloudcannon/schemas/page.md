@@ -1,6 +1,5 @@
 ---
 title:
-selected_locale: en
 seo:
   page_description:
   canonical_url:

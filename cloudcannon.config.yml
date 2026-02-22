@@ -235,17 +235,6 @@ collection_groups:
     collections:
       - data
 _inputs:
-  selected_locale:
-    type: select
-    label: Selected Locale
-    comment: The locale to display in the Visual Editor. Leave empty for the default language.
-    options:
-      allow_empty: true
-      values:
-        - fr
-        - en
-        - de
-    cascade: true
   page_slug:
     hidden: true
     cascade: true
