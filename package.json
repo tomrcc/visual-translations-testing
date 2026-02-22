@@ -12,7 +12,7 @@
     "rosey-connector": "npm run rosey-generate && npm run write-locales",
     "rosey-generate": "npx rosey generate --source dist",
     "write-locales": "node writeLocales.mjs",
-    "rosey-build": "mv dist dist_untranslated && npx rosey build --source dist_untranslated --output dist --default-language-at-root"
+    "rosey-build": "mv dist dist_untranslated && npx rosey build --source dist_untranslated --dest dist --default-language-at-root"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.5",
