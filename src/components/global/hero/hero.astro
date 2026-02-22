@@ -3,9 +3,7 @@ import { Image } from "astro:assets";
 import Button from "../../shared/Button.astro";
 import Heading from "../../shared/Heading.astro";
 import Text from "../../shared/Text.astro";
-import TestHeading from "@components/shared/TestHeading.astro";
 
-// Define TypeScript interfaces
 interface ButtonType {
   link: string;
   text: string;
@@ -19,8 +17,7 @@ interface HeroImage {
 
 interface Props {
   title: string;
-  selected_locale?: string;
-  page_slug?: string;
+  rosey_prefix?: string;
   description: string;
   button?: ButtonType;
   image?: string;
@@ -28,8 +25,7 @@ interface Props {
   hero_images?: HeroImage[];
 }
 
-
-const { title, selected_locale, page_slug, description, button, image, image_alt, hero_images } = Astro.props;
+const { title, rosey_prefix, description, button, image, image_alt, hero_images } = Astro.props;
 
 // Helper function to get placement class
 const getPlacementClass = (placement: string) => {
@@ -66,9 +62,8 @@ const hasSingleImage = image && image_alt;
 
   <div class="mx-auto max-w-[1500px] px-6 pt-10 pb-24 sm:pb-32 lg:flex lg:px-8 lg:py-40">
     <div class="mx-auto max-w-2xl shrink-0 lg:mx-0 lg:pt-8">
-      <TestHeading level={1} text={title} data-prop="title" selectedLocale={selected_locale} pageslug={page_slug} data-editable="text" class="mb-6" />
-      <!-- <h1 data-editable="text" data-prop="@data[locales].test.value">This is some text</h1> -->
-      <Text text={description} data-prop="description" data-editable="text" size="xl" markdown={true} class="text-pretty" />
+      <Heading level={1} text={title} data-prop="title" data-editable="text" data-rosey={rosey_prefix ? `${rosey_prefix}_title` : undefined} data-rcc={rosey_prefix ? true : undefined} class="mb-6" />
+      <Text text={description} data-prop="description" data-editable="text" data-rosey={rosey_prefix ? `${rosey_prefix}_description` : undefined} data-rcc={rosey_prefix ? true : undefined} size="xl" markdown={true} class="text-pretty" />
       <div class="mt-10 flex items-center gap-x-6">
         {button && <Button href={button.link} variant={"primary"} size={"lg"} text={button.text} data-prop="button.text" data-editable="text" />}
       </div>

@@ -18,6 +18,8 @@ const {
   ...rest
 } = Astro.props;
 
+const { "data-editable": dataEditable, "data-prop": dataProp, "data-rosey": dataRosey, "data-rcc": dataRcc, ...elementRest } = rest;
+
 // Runtime check to ensure proper usage
 const hasSlotContent = Astro.slots.has("default");
 if (text && hasSlotContent) {
@@ -42,15 +44,29 @@ const classes = `text-gray-600 prose ${sizeStyles[size]} ${className}`;
 
 {
   text ? (
-    markdown ? (
-      <div class={classes} set:html={md.render(text)} {...rest} />
+    dataEditable && dataProp ? (
+      markdown ? (
+        <div class={classes} {...elementRest}>
+          <editable-text data-editable={dataEditable} data-prop={dataProp} data-rosey={dataRosey} data-rcc={dataRcc} set:html={md.render(text)} />
+        </div>
+      ) : (
+        <p class={classes} {...elementRest}>
+          <editable-text data-editable={dataEditable} data-prop={dataProp} data-rosey={dataRosey} data-rcc={dataRcc}>
+            {text}
+          </editable-text>
+        </p>
+      )
     ) : (
-      <p class={classes} {...rest}>
-        {text}
-      </p>
+      markdown ? (
+        <div class={classes} set:html={md.render(text)} {...elementRest} />
+      ) : (
+        <p class={classes} {...elementRest}>
+          {text}
+        </p>
+      )
     )
   ) : (
-    <div class={classes} {...rest}>
+    <div class={classes} {...elementRest}>
       <slot />
     </div>
   )

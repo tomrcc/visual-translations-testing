@@ -17,7 +17,7 @@ if (text && hasSlotContent) {
 }
 
 // Extract CloudCannon-specific attributes for the text wrapper
-const { "data-editable": dataEditable, "data-prop": dataProp, ...elementRest } = rest;
+const { "data-editable": dataEditable, "data-prop": dataProp, "data-rosey": dataRosey, "data-rcc": dataRcc, ...elementRest } = rest;
 
 // Default heading styles based on level/size
 const levelStyles = {
@@ -41,7 +41,7 @@ const Tag = `h${level}` as any;
   {
     text ? (
       dataEditable && dataProp ? (
-        <editable-text data-editable={dataEditable} data-prop={dataProp}>
+        <editable-text data-editable={dataEditable} data-prop={dataProp} data-rosey={dataRosey} data-rcc={dataRcc}>
           {text}
         </editable-text>
       ) : (

@@ -1,22 +1,37 @@
 {
   "version": 2,
   "keys": {
-    "about_title": {
-      "original": "On a mission to change email marketing",
+    "about_description": {
+      "original": "<p>We're here to breathe new air into email marketing and help grow your business.</p>\n",
       "value": null,
       "pages": {
         "about/index.html": 1
       },
       "total": 1
     },
-    "index_title": {
-      "original": "Beautiful web campaigns",
+    "about_title": {
+      "original": " On a mission to change email marketing ",
       "value": null,
       "pages": {
-        "features/index.html": 1,
+        "about/index.html": 1
+      },
+      "total": 1
+    },
+    "index_description": {
+      "original": "<p>With Sendit, you can quickly create beautiful rich emails that capture a reader's attention, engage them, and convert them into customers.</p>\n",
+      "value": null,
+      "pages": {
         "index.html": 1
       },
-      "total": 2
+      "total": 1
+    },
+    "index_title": {
+      "original": " Beautiful web campaigns ",
+      "value": null,
+      "pages": {
+        "index.html": 1
+      },
+      "total": 1
     }
   }
 }

@@ -30,7 +30,8 @@ const { content_blocks } = Astro.props;
   data-editable="array"
   data-prop="content_blocks"
   data-id-key="_name"
-  data-component-key="_name">
+  data-component-key="_name"
+  data-locales="fr,de">
   {
     content_blocks.map((block: any) => {
       const key = block._name;

@@ -11,9 +11,8 @@ seo:
   no_index: false
 content_blocks:
   - _name: global/hero
+    rosey_prefix: about
     title: On a mission to change email marketing
-    page_slug: about
-    selected_locale: en
     description: >-
       We're here to breathe new air into email marketing and help grow your
       business.
