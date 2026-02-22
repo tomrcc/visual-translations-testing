@@ -1,6 +1,7 @@
 ---
 _schema: default
 title: About
+selected_locale: en
 seo:
   page_description:
   canonical_url:
@@ -13,7 +14,7 @@ content_blocks:
   - _name: global/hero
     title: On a mission to change email marketing
     page_slug: about
-    selected_locale: en
+    selected_locale: de
     description: >-
       We're here to breathe new air into email marketing and help grow your
       business.
@@ -63,6 +64,7 @@ content_blocks:
     video:
       image: /images/works/banner.jpg
       image_alt: Thumbnail image for video
+      link: https://vimeo.com/45830194
       video_url: https://vimeo.com/45830194
   - _name: global/team
     title: Our leadership team
@@ -70,33 +72,33 @@ content_blocks:
       - name: Nikolas Mcconnell
         designation: Co-Founder & CEO
         image: /images/team/1.jpg
-        image_alt: "Team member: Nikolas Mcconnell"
+        image_alt: 'Team member: Nikolas Mcconnell'
       - name: Keiren Mcculloch
         designation: CMO
         image: /images/team/2.jpg
-        image_alt: "Team member: Keiren Mcculloch"
+        image_alt: 'Team member: Keiren Mcculloch'
       - name: Piers Reyes
         designation: Head of Marketing
         image: /images/team/3.jpg
-        image_alt: "Team member: Piers Reyes"
+        image_alt: 'Team member: Piers Reyes'
       - name: Zachary Arias
         designation: Co-founder & CTO
         image: /images/team/4.jpg
-        image_alt: "Team member: Zachary Arias"
+        image_alt: 'Team member: Zachary Arias'
       - name: Harmony Dunlop
         designation: Head of Sales
         image: /images/team/5.jpg
-        image_alt: "Team member: Harmony Dunlop"
+        image_alt: 'Team member: Harmony Dunlop'
       - name: Elize Schwartz
         designation: CRO
         image: /images/team/6.jpg
-        image_alt: "Team member: Elize Schwartz"
+        image_alt: 'Team member: Elize Schwartz'
       - name: Coen Simmons
         designation: Head of Design
         image: /images/team/7.jpg
-        image_alt: "Team member: Coen Simmons"
+        image_alt: 'Team member: Coen Simmons'
       - name: Fran Figureson
         designation: Head of People
         image: /images/team/8.jpg
-        image_alt: "Team member: Fran Figureson"
+        image_alt: 'Team member: Fran Figureson'
 ---
