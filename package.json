@@ -9,7 +9,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "rosey-connector": "npm run build && npm run rosey-generate && npm run write-locales",
+    "rosey-connector": "npm run rosey-generate && npm run write-locales",
     "rosey-generate": "npx rosey generate --source dist",
     "write-locales": "node writeLocales.mjs"
   },
