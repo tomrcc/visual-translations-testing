@@ -80,7 +80,7 @@ const canonicalURL = new URL(seo?.canonical_url ?? Astro.url.pathname, baseUrl);
       }
     </script>
     <script>
-      import("../scripts/rcc/index.ts").catch((error) => {
+      import("../scripts/rcc/src/index.ts").catch((error) => {
         console.warn("Failed to load RCC locale injector:", error);
       });
     </script>
