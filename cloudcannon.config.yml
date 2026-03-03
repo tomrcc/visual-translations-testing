@@ -1,6 +1,14 @@
 paths:
-  uploads: public/images
+  uploads: public/images/test
   static: public
+
+markdown:
+  engine: commonmark
+  options:
+    html: true
+    breaks: false
+    xhtml: false
+
 collections_config:
   pages:
     path: src/content/pages
